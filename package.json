@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "scripts": {
         "dev": "webpack-dev-server --mode=development --inline --hot",
-        "build": "webpack --mode-production"
+        "build": "webpack --mode=production"
     },
     "devDependencies": {
         "@babel/cli": "^7.5.0",
@@ -11,8 +11,14 @@
         "@babel/polyfill": "^7.4.4",
         "@babel/preset-env": "^7.5.4",
         "babel-loader": "^8.0.6",
+        "vue-loader": "^15.7.0",
+        "vue-template-compiler": "^2.6.10",
         "webpack": "^4.35.3",
         "webpack-cli": "^3.3.5",
         "webpack-dev-server": "^3.7.2"
+    },
+    "dependencies": {
+        "vue": "^2.6.10",
+        "vue-router": "^3.0.7"
     }
 }

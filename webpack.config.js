@@ -1,4 +1,5 @@
 const path = require('path');
+const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
     entry: {
@@ -42,6 +43,10 @@ module.exports = {
                     ]
                 }
             },
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader',
+            }
 
             /* You can leave the css processing alone, and use them like using them without Webpack
                I found that using loader to process the CSS files will require more loaders,
@@ -76,6 +81,11 @@ module.exports = {
         ]
     },
     plugins: [
+        new VueLoaderPlugin()
     ],
     devtool: "eval-source-map" // for debugging easier in development mode
 };
+
+// https://segmentfault.com/q/1010000015598957/
+
+console.log(require.ensure);
