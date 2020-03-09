@@ -1,9 +1,10 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
+// const AutoPrefixer = require('autoprefixer');
 
 module.exports = {
     entry: {
-        index: "./src/index.js",
+        index: "./src/index.js"
     },
     output: {
         path: path.resolve(__dirname, "./dist"),
@@ -45,12 +46,13 @@ module.exports = {
             },
             {
                 test: /\.vue$/,
-                loader: 'vue-loader',
-            }
+                loader: 'vue-loader'
+            },
 
             /* You can leave the css processing alone, and use them like using them without Webpack
                I found that using loader to process the CSS files will require more loaders,
-               If your css files include images from ohter places, then you need url-loader, futhermore,
+               If your css files include images from ohter places, then you need url-loader,
+               (url-loader is enough if you don't using base64 images), futhermore,
                you may need file-loader, and since the style sheet will be placed in html files,
                you need some plugins to make them into files.
 
@@ -78,14 +80,21 @@ module.exports = {
             //         }
             //     ]
             // },
+            // {
+            //      test: /\.(png|jpe?g)$/,
+            //      loader: 'url-loader'
+            //  }
         ]
     },
     plugins: [
         new VueLoaderPlugin()
-    ],
-    devtool: "eval-source-map" // for debugging easier in development mode
+    ]
 };
 
 // https://segmentfault.com/q/1010000015598957/
 
-console.log(require.ensure);
+if (process.env.NODE_ENV === 'production') {
+    //
+} else {
+    module.exports.devtool = 'eval-source-map';  // for debugging easier in development mode
+}
