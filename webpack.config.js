@@ -53,7 +53,7 @@ module.exports = {
                I found that using loader to process the CSS files will require more loaders,
                If your css files include images from ohter places, then you need url-loader,
                (url-loader is enough if you don't using base64 images), futhermore,
-               you may need file-loader, and since the style sheet will be placed in html files,
+               you may need file-loader for fallback, and since the style sheet will be placed in html files,
                you need some plugins to make them into files.
 
                Since I don't need to compile sass or any ohters like it or using hash tags,
@@ -63,27 +63,39 @@ module.exports = {
                https://www.npmjs.com/package/html-webpack-plugin#
             */
 
-            // {
-            //     test: /\.css$/,
-            //     use: [
-            //         // Understand the difference between style-loader and css-loader
-            //         // and style-loader must be placed before css-loader
-            //         'style-loader',
-            //         'css-loader',
-            //         {
-            //             loader: 'postcss-loader',
-            //             options: {
-            //                 plugins: [
-            //                     AutoPrefixer
-            //                 ]
-            //             }
-            //         }
-            //     ]
-            // },
-            // {
-            //      test: /\.(png|jpe?g)$/,
-            //      loader: 'url-loader'
-            //  }
+            /*
+            {
+                test: /\.css$/,
+                use: [
+                    // Understand the difference between style-loader and css-loader
+                    // and style-loader must be placed before css-loader
+                    'style-loader',
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: [
+                                AutoPrefixer
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.(png|jpe?g)$/,
+                loader: 'url-loader',
+                limit: 51200,
+                fallback: {
+                    // when size of image file exceeds 51200 bytes, the use file-loader as
+                    // the alternative loader by default
+                    outputPath: './image',
+                    // the images lagger than 51200 bytes will be put in "./dist/img" like this
+                    publicPath: 'dist/image',
+                    name: '[name]-[hash].[ext]'
+                    // the image's url looks like "dist/image/[name]-[hash].[ext]"
+                }
+            }
+            */
         ]
     },
     plugins: [
