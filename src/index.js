@@ -1,9 +1,21 @@
-import Vue from "vue/dist/vue.js";
-import LoginView from "../view/LoginView.vue";
+async function hello() {
+    const { default: _ } = await import(/* webpackChunkName: "loadsh" */ 'loadsh');
+    let str = _.join(['Hello', ','], ' ');
+    return str;
+}
 
-new Vue({
-    el: "#app",
-    data: {
-        seen: false
-    }
+hello().then(res => {
+    console.log(res);
 });
+
+function world() {
+    import(/* webpackChunkName: "loadsh" */ 'loadsh')
+        .then(module => {
+            return module.default.join(['world', '!'], ' ');
+        })
+        .then(res => {
+            console.log(res);
+        });
+}
+
+world();

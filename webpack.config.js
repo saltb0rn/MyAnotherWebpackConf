@@ -1,16 +1,41 @@
 const path = require('path');
-const { VueLoaderPlugin } = require('vue-loader');
+// const { VueLoaderPlugin } = require('vue-loader');
 // const AutoPrefixer = require('autoprefixer');
 
 module.exports = {
     entry: {
-        index: "./src/index.js"
+        /**
+           if some files both import the same module,
+           we can prevent duplication like this:
+        */
+
+        /**
+         //since webpack v5,
+         index: { import: "./src/index.js", dependOn: 'shared' },
+         another: { import: './src/another.js', dependOn: 'shared' },
+         shared: 'loadsh'
+        */
+
+        /**
+         // since webpack v4, use SplitChunksPlugin,
+         // see optimization option below
+         index: './src/index.js',
+         another: './src/another.js',
+        */
+        index: './src/index.js',
+        another: './src/another.js',
     },
     output: {
         path: path.resolve(__dirname, "./dist"),
         publicPath: "/dist/",
         // This is useful for hot module reloading, it tells Webpack that the resources of <script> tags are pointed to [name].js files in memory instead of on harddisk, it should be relative to contentBase in devServer
-        filename: "[name].js"
+        filename: "[name].bundle.js",
+        chunkFilename: '[name].aux-bundle.js'
+    },
+    optimization: {
+        splitChunks: {
+            chunks: 'all'
+        }
     },
     devServer: {
         index: "index.html",
@@ -40,14 +65,25 @@ module.exports = {
                             {
                                 'targets': '> 5%, not dead, last 2 versions'
                             }
-                        ]
+                        ],
+                    ],
+                    plugins: [
+                        [
+                            '@babel/plugin-transform-runtime',
+                            {
+                                "regenerator": true
+                            }
+                        ],
                     ]
+
                 }
             },
-            {
-                test: /\.vue$/,
-                loader: 'vue-loader'
-            },
+            /* The below section is about the web developement
+             */
+            // {
+            //     test: /\.vue$/,
+            //     loader: 'vue-loader'
+            // },
 
             /* You can leave the css processing alone, and use them like using them without Webpack
                I found that using loader to process the CSS files will require more loaders,
@@ -63,43 +99,46 @@ module.exports = {
                https://www.npmjs.com/package/html-webpack-plugin#
             */
 
-            /*
-            {
-                test: /\.css$/,
-                use: [
-                    // Understand the difference between style-loader and css-loader
-                    // and style-loader must be placed before css-loader
-                    'style-loader',
-                    'css-loader',
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            plugins: [
-                                AutoPrefixer
-                            ]
-                        }
-                    }
-                ]
-            },
-            {
-                test: /\.(png|jpe?g)$/,
-                loader: 'url-loader',
-                limit: 51200,
-                fallback: {
-                    // when size of image file exceeds 51200 bytes, the use file-loader as
-                    // the alternative loader by default
-                    outputPath: './image',
-                    // the images lagger than 51200 bytes will be put in "./dist/img" like this
-                    publicPath: 'dist/image',
-                    name: '[name]-[hash].[ext]'
-                    // the image's url looks like "dist/image/[name]-[hash].[ext]"
-                }
-            }
-            */
+            // {
+            //     test: /\.css$/,
+            //     use: [
+            //         // Understand the difference between style-loader and css-loader
+            //         // and style-loader must be placed before css-loader
+            //         'style-loader',
+            //         'css-loader',
+            //         {
+            //             loader: 'postcss-loader',
+            //             options: {
+            //                 plugins: [
+            //                     AutoPrefixer
+            //                 ]
+            //             }
+            //         }
+            //     ]
+            // },
+            // {
+            //     test: /\.(woff|svg|eot|ttf|png|jpe?g)$/,
+            //     use: [
+            //         {
+            //             loader: 'url-loader',
+            //             options: {
+            //                 esModule: false,
+            //                 limit: 1000,
+            //                 // when size of image file exceeds 51200 bytes, the use file-loader as
+            //                 // the alternative loader by default
+            //                 outputPath: './img',
+            //                 // the images lagger than 51200 bytes will be put in "./dist/img" like this
+            //                 publicPath: 'dist/img',
+            //                 name: '[name]-[hash].[ext]'
+            //                 // the image's url looks like "dist/img/[name]-[hash].[ext]"
+            //             }
+            //         },
+            //     ]
+            // }
         ]
     },
     plugins: [
-        new VueLoaderPlugin()
+        // new VueLoaderPlugin()
     ]
 };
 
